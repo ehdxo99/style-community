@@ -43,61 +43,49 @@
             justify-content: center;
             box-shadow: 0 2px 5px rgba(0,0,0,0.05);
         }
-        .nav-inner { width: 100%; max-width: 1200px; display: flex; justify-content: space-between; padding: 0 20px; }
-        .logo { font-size: 24px; font-weight: 800; font-style: italic; color: var(--accent-color); }
-        .nav-menu a { margin-left: 20px; font-weight: 500; color: #555; text-decoration: none; }
+        .nav-inner { width: 100%; max-width: 1200px; display: flex; justify-content: space-between; padding: 0 20px; align-items: center; }
+        .logo { font-size: 24px; font-weight: 800; font-style: italic; color: var(--accent-color); cursor: pointer; }
+        .nav-menu { display: flex; gap: 20px; align-items: center; }
+        .nav-link { font-weight: 500; color: #555; cursor: pointer; font-size: 14px; }
+        .nav-link:hover { color: var(--accent-color); }
+
+        /* 로그인 버튼 스타일 */
+        .login-btn {
+            background-color: var(--accent-color);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: bold;
+            border: none;
+            cursor: pointer;
+        }
+        .user-info { font-size: 14px; font-weight: 600; color: #333; display: flex; align-items: center; gap: 10px; }
+        .logout-link { color: #888; font-size: 12px; cursor: pointer; text-decoration: underline; }
 
         .ad-banner {
-            height: 600px;
-            background: #e9ecef;
-            color: #adb5bd;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: bold;
-            position: sticky;
-            top: 80px;
-            border-radius: 8px;
+            height: 600px; background: #e9ecef; color: #adb5bd;
+            display: flex; align-items: center; justify-content: center;
+            font-weight: bold; position: sticky; top: 80px; border-radius: 8px;
         }
         .ad-banner::after { content: "AD"; }
 
-        .main-content {
-            display: flex;
-            flex-direction: column;
-            gap: 25px;
-            min-width: 0;
-        }
+        .main-content { display: flex; flex-direction: column; gap: 25px; min-width: 0; }
 
-        .photo-banner {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 15px;
-        }
+        .photo-banner { display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px; }
         .photo-card {
-            background: white;
-            border-radius: 12px;
-            overflow: hidden;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-            cursor: pointer;
-            transition: transform 0.2s;
+            background: white; border-radius: 12px; overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05); cursor: pointer; transition: transform 0.2s;
         }
         .photo-card:hover { transform: translateY(-3px); }
         .photo-img { width: 100%; height: 120px; background: #ddd; object-fit: cover; }
         .photo-info { padding: 10px; font-size: 14px; font-weight: 600; text-align: center; }
 
         .trend-section, .board-container {
-            background: white;
-            padding: 20px;
-            border-radius: 12px;
+            background: white; padding: 20px; border-radius: 12px;
             box-shadow: 0 2px 8px rgba(0,0,0,0.05);
         }
-        
-        .section-header { 
-            display: flex; 
-            justify-content: space-between; 
-            align-items: center; 
-            margin-bottom: 15px; 
-        }
+        .section-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
         .section-title { font-size: 18px; font-weight: 700; display: flex; align-items: center; gap: 8px; }
         .hot-badge { background: #ff4d4f; color: white; padding: 2px 6px; border-radius: 4px; font-size: 11px; }
 
@@ -111,68 +99,50 @@
         .write-toggle-btn:hover { background-color: var(--accent-color); color: white; }
 
         .mini-write-form {
-            background: #f8f9fa;
-            padding: 15px;
-            border-radius: 8px;
-            margin-bottom: 20px;
-            display: none;
-            gap: 10px;
-            flex-direction: column;
-            border: 1px solid #eee;
-            animation: slideDown 0.3s ease-out;
+            background: #f8f9fa; padding: 15px; border-radius: 8px;
+            margin-bottom: 20px; display: none; gap: 10px; flex-direction: column;
+            border: 1px solid #eee; animation: slideDown 0.3s ease-out;
         }
-        
-        @keyframes slideDown {
-            from { opacity: 0; transform: translateY(-10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
+        @keyframes slideDown { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
 
         .form-row { display: flex; gap: 10px; }
         .mini-input { flex: 1; padding: 10px; border: 1px solid #ddd; border-radius: 4px; }
-        .nickname-input { width: 120px; padding: 10px; border: 1px solid #ddd; border-radius: 4px; } /* 닉네임 칸 스타일 */
-        
-        .mini-textarea {
-            width: 100%; height: 100px; padding: 10px;
-            border: 1px solid #ddd; border-radius: 4px;
-            resize: vertical; font-family: inherit;
-        }
-
-        .mini-btn {
-            background: var(--accent-color); color: white; border: none; padding: 0 20px;
-            border-radius: 4px; font-weight: bold; cursor: pointer;
-        }
+        .mini-textarea { width: 100%; height: 100px; padding: 10px; border: 1px solid #ddd; border-radius: 4px; resize: vertical; font-family: inherit; }
+        .mini-btn { background: var(--accent-color); color: white; border: none; padding: 0 20px; border-radius: 4px; font-weight: bold; cursor: pointer; }
         .mini-btn:hover { background: #4c4edb; }
 
-        .post-list li {
-            padding: 12px 0;
-            border-bottom: 1px solid #f1f1f1;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        
-        /* 게시글 내용 레이아웃 */
-        .post-info-wrapper {
-            display: flex;
-            flex-direction: column;
-            gap: 4px;
-            cursor: pointer;
-            width: 100%;
-        }
+        .post-list li { padding: 12px 0; border-bottom: 1px solid #f1f1f1; display: flex; justify-content: space-between; align-items: center; }
+        .post-info-wrapper { display: flex; flex-direction: column; gap: 4px; cursor: pointer; width: 100%; }
         .post-title { font-size: 15px; font-weight: 600; }
         .post-title:hover { text-decoration: underline; }
-        
-        /* 메타 정보 (닉네임, 시간, 조회수) */
-        .post-meta {
-            font-size: 12px;
-            color: #888;
-            display: flex;
-            gap: 10px;
-        }
+        .post-meta { font-size: 12px; color: #888; display: flex; gap: 10px; }
         .meta-item { display: flex; align-items: center; gap: 3px; }
-
         .del-btn { color: #ccc; cursor: pointer; border: none; background: none; font-size: 18px; margin-left: 10px;}
         .del-btn:hover { color: red; }
+
+        /* --- 로그인 모달 스타일 --- */
+        .modal-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.5); z-index: 1000;
+            display: none; justify-content: center; align-items: center;
+        }
+        .auth-box {
+            background: white; padding: 30px; border-radius: 12px; width: 350px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2); position: relative;
+        }
+        .auth-title { font-size: 20px; font-weight: bold; margin-bottom: 20px; text-align: center; }
+        .auth-input {
+            width: 100%; padding: 12px; margin-bottom: 10px;
+            border: 1px solid #ddd; border-radius: 6px;
+        }
+        .auth-btn {
+            width: 100%; padding: 12px; background: var(--accent-color);
+            color: white; border: none; border-radius: 6px; font-weight: bold; cursor: pointer;
+            margin-top: 10px;
+        }
+        .auth-switch { text-align: center; margin-top: 15px; font-size: 13px; color: #666; }
+        .switch-link { color: var(--accent-color); cursor: pointer; font-weight: bold; }
+        .close-modal { position: absolute; top: 15px; right: 20px; font-size: 24px; cursor: pointer; color: #999; }
 
         @media (max-width: 1024px) {
             .wrapper { grid-template-columns: 1fr; }
@@ -187,8 +157,9 @@
         <div class="nav-inner">
             <div class="logo">Style</div>
             <nav class="nav-menu">
-                <a href="#">홈</a>
-                <a href="#">로그인</a>
+                <div id="auth-section">
+                    <button class="login-btn" onclick="openModal()">로그인 / 회원가입</button>
+                </div>
             </nav>
         </div>
     </header>
@@ -220,13 +191,11 @@
                 
                 <div id="free-form-box" class="mini-write-form">
                     <div class="form-row">
-                        <input type="text" id="free-nickname" class="nickname-input" placeholder="닉네임">
                         <input type="text" id="free-title" class="mini-input" placeholder="제목을 입력하세요">
                         <button class="mini-btn" onclick="addPost('free')">등록</button>
                     </div>
                     <textarea id="free-content" class="mini-textarea" placeholder="내용을 입력하세요"></textarea>
                 </div>
-
                 <ul id="free-list" class="post-list"></ul>
             </div>
 
@@ -238,13 +207,11 @@
 
                 <div id="fashion-form-box" class="mini-write-form">
                     <div class="form-row">
-                         <input type="text" id="fashion-nickname" class="nickname-input" placeholder="닉네임">
                         <input type="text" id="fashion-title" class="mini-input" placeholder="제목을 입력하세요">
                         <button class="mini-btn" onclick="addPost('fashion')">등록</button>
                     </div>
                     <textarea id="fashion-content" class="mini-textarea" placeholder="내용을 입력하세요"></textarea>
                 </div>
-
                 <ul id="fashion-list" class="post-list"></ul>
             </div>
 
@@ -253,140 +220,48 @@
         <aside class="ad-banner" style="background:#fff3e0; color:#ff9800;"></aside>
     </div>
 
+    <div id="login-modal" class="modal-overlay">
+        <div class="auth-box">
+            <span class="close-modal" onclick="closeModal()">&times;</span>
+            
+            <div id="login-form">
+                <div class="auth-title">로그인</div>
+                <input type="text" id="login-id" class="auth-input" placeholder="아이디">
+                <input type="password" id="login-pw" class="auth-input" placeholder="비밀번호">
+                <button class="auth-btn" onclick="login()">로그인 하기</button>
+                <div class="auth-switch">
+                    계정이 없으신가요? <span class="switch-link" onclick="switchAuthMode('signup')">회원가입</span>
+                </div>
+            </div>
+
+            <div id="signup-form" style="display:none;">
+                <div class="auth-title">회원가입</div>
+                <input type="text" id="reg-id" class="auth-input" placeholder="아이디">
+                <input type="password" id="reg-pw" class="auth-input" placeholder="비밀번호">
+                <input type="text" id="reg-nick" class="auth-input" placeholder="사용할 닉네임">
+                <button class="auth-btn" onclick="signup()">가입 하기</button>
+                <div class="auth-switch">
+                    이미 계정이 있으신가요? <span class="switch-link" onclick="switchAuthMode('login')">로그인</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script>
-        document.addEventListener('DOMContentLoaded', renderAll);
+        // --- 1. 인증 시스템 (회원가입/로그인) ---
+        let currentUser = null; // 현재 로그인한 유저 정보
 
-        function toggleForm(type) {
-            const formBox = document.getElementById(type + '-form-box');
-            if (formBox.style.display === 'flex') {
-                formBox.style.display = 'none';
-            } else {
-                formBox.style.display = 'flex';
-                document.getElementById(type + '-nickname').focus(); // 닉네임부터 입력하게 포커스
-            }
-        }
-
-        function addPost(type) {
-            const nicknameInput = document.getElementById(type + '-nickname');
-            const titleInput = document.getElementById(type + '-title');
-            const contentInput = document.getElementById(type + '-content');
-
-            if (!titleInput.value) { alert('제목을 입력해주세요!'); return; }
-            // 닉네임 안 쓰면 '익명'으로 처리
-            const nickname = nicknameInput.value.trim() || "익명";
-
-            // 현재 시간 포맷 (월-일 시:분)
-            const now = new Date();
-            const timeString = `${now.getMonth()+1}/${now.getDate()} ${now.getHours()}:${String(now.getMinutes()).padStart(2,'0')}`;
-
-            const post = {
-                id: Date.now(),
-                type: type,
-                nickname: nickname, // 닉네임 저장
-                title: titleInput.value,
-                content: contentInput.value,
-                date: timeString, // 시간 저장
-                views: 0 // 조회수 0 초기화
-            };
-
-            let posts = JSON.parse(localStorage.getItem('stylePosts')) || [];
-            posts.unshift(post);
-            localStorage.setItem('stylePosts', JSON.stringify(posts));
-
-            nicknameInput.value = '';
-            titleInput.value = '';
-            contentInput.value = '';
-            
-            toggleForm(type);
+        document.addEventListener('DOMContentLoaded', () => {
+            checkLoginStatus(); // 새로고침 시 로그인 유지 확인
             renderAll();
-        }
+        });
 
-        // 조회수 증가 및 내용 보기 함수
-        function viewPost(id) {
-            let posts = JSON.parse(localStorage.getItem('stylePosts')) || [];
-            // 해당 글 찾기
-            const index = posts.findIndex(p => p.id === id);
-            
-            if(index !== -1) {
-                // 조회수 1 증가
-                posts[index].views = (posts[index].views || 0) + 1;
-                localStorage.setItem('stylePosts', JSON.stringify(posts));
-                
-                // 화면 갱신 (조회수 올라간거 보여주기 위해)
-                renderAll();
-
-                // 내용 보여주기
-                alert(`[${posts[index].title}]\n\n${posts[index].content}`);
+        function checkLoginStatus() {
+            const storedUser = localStorage.getItem('currentUser');
+            if (storedUser) {
+                currentUser = JSON.parse(storedUser);
+                updateAuthUI();
             }
         }
 
-        function deletePost(id) {
-            // 이벤트 전파 방지 (삭제 눌렀는데 조회수 오르는 것 방지)
-            event.stopPropagation(); 
-            
-            if(confirm('삭제하시겠습니까?')) {
-                let posts = JSON.parse(localStorage.getItem('stylePosts')) || [];
-                posts = posts.filter(p => p.id !== id);
-                localStorage.setItem('stylePosts', JSON.stringify(posts));
-                renderAll();
-            }
-        }
-
-        function renderAll() {
-            const posts = JSON.parse(localStorage.getItem('stylePosts')) || [];
-            const freeList = document.getElementById('free-list');
-            const fashionList = document.getElementById('fashion-list');
-            const trendList = document.getElementById('trend-list');
-
-            freeList.innerHTML = '';
-            fashionList.innerHTML = '';
-            trendList.innerHTML = '';
-
-            posts.forEach(post => {
-                // 예전 데이터 호환성 처리
-                const nickname = post.nickname || "익명";
-                const views = post.views || 0;
-                
-                const html = `
-                    <li>
-                        <div class="post-info-wrapper" onclick="viewPost(${post.id})">
-                            <span class="post-title">${post.title}</span>
-                            <div class="post-meta">
-                                <span class="meta-item">👤 ${nickname}</span>
-                                <span class="meta-item">🕒 ${post.date}</span>
-                                <span class="meta-item">👁️ ${views}</span>
-                            </div>
-                        </div>
-                        <button class="del-btn" onclick="deletePost(${post.id})">&times;</button>
-                    </li>
-                `;
-                if (post.type === 'free') freeList.innerHTML += html;
-                else if (post.type === 'fashion') fashionList.innerHTML += html;
-            });
-
-            // 실시간 트렌드 (조회수 순으로 정렬하려면 sort 사용, 지금은 최신순 유지)
-            const trendPosts = posts.slice(0, 3);
-            if(trendPosts.length > 0) {
-                trendPosts.forEach((post, index) => {
-                    const views = post.views || 0;
-                    trendList.innerHTML += `
-                        <li>
-                            <div class="post-info-wrapper" onclick="viewPost(${post.id})">
-                                <span class="post-title">
-                                    <span class="hot-badge">${index+1}</span> ${post.title}
-                                </span>
-                                <div class="post-meta">
-                                    <span style="color:#5d5fef; font-weight:bold;">${post.type === 'free' ? '자유' : '패션'}</span>
-                                    <span>👁️ ${views}</span>
-                                </div>
-                            </div>
-                        </li>
-                    `;
-                });
-            } else {
-                trendList.innerHTML = '<li style="color:#aaa; text-align:center;">작성된 글이 없습니다.</li>';
-            }
-        }
-    </script>
-</body>
-</html>
+        function updateAuthUI() {
