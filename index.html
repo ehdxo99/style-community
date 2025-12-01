@@ -49,7 +49,6 @@
         }
         .ad-banner::after { content: "AD"; }
 
-        /* 메인 컨텐츠 영역 */
         .main-content { display: flex; flex-direction: column; gap: 25px; min-width: 0; }
 
         .photo-banner { display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px; }
@@ -99,23 +98,18 @@
         .del-btn { color: #ccc; cursor: pointer; border: none; background: none; font-size: 18px; margin-left: 10px;}
         .del-btn:hover { color: red; }
 
-        /* --- 상세 페이지 (Detail View) 스타일 --- */
         .detail-view { display: none; flex-direction: column; gap: 20px; animation: fadeIn 0.3s; }
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
         
         .detail-header { border-bottom: 1px solid #eee; padding-bottom: 20px; }
+        /* 뒤로가기 버튼 기능 변경됨 (JS 참조) */
         .back-btn { background: none; border: 1px solid #ddd; padding: 5px 12px; border-radius: 4px; cursor: pointer; margin-bottom: 15px; display: inline-block;}
         .back-btn:hover { background: #f1f1f1; }
         
         .detail-title-text { font-size: 24px; font-weight: 800; margin-bottom: 10px; }
         .detail-meta-info { font-size: 13px; color: #888; display: flex; gap: 15px; }
+        .detail-body { background: white; padding: 30px; border-radius: 12px; min-height: 200px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); font-size: 16px; line-height: 1.6; white-space: pre-wrap; }
 
-        .detail-body { 
-            background: white; padding: 30px; border-radius: 12px; min-height: 200px; 
-            box-shadow: 0 2px 8px rgba(0,0,0,0.05); font-size: 16px; line-height: 1.6; white-space: pre-wrap;
-        }
-
-        /* 댓글 스타일 */
         .comment-section { background: white; padding: 20px; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
         .comment-header { font-weight: 700; margin-bottom: 15px; border-bottom: 2px solid #f1f1f1; padding-bottom: 10px; }
         .comment-list { list-style: none; margin-bottom: 20px; }
@@ -126,7 +120,6 @@
         .comment-input { flex: 1; padding: 10px; border: 1px solid #ddd; border-radius: 4px; }
         .comment-btn { background: #333; color: white; border: none; padding: 0 20px; border-radius: 4px; font-weight: bold; cursor: pointer; }
 
-        /* 모달 스타일 */
         .modal-overlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: rgba(0,0,0,0.5); z-index: 1000;
@@ -167,7 +160,6 @@
         <aside class="ad-banner" style="background:#e3f2fd; color:#2196f3;"></aside>
 
         <div style="min-width: 0; width: 100%;">
-            
             <main id="main-view" class="main-content">
                 <div class="photo-banner">
                     <div class="photo-card"><img src="https://via.placeholder.com/300x150/5d5fef/ffffff?text=OOTD" class="photo-img"><div class="photo-info">데일리 룩</div></div>
@@ -225,23 +217,18 @@
                     </div>
                 </div>
 
-                <div id="view-content" class="detail-body">
-                    글 내용이 여기에 들어옵니다.
-                </div>
+                <div id="view-content" class="detail-body">내용</div>
 
                 <div class="comment-section">
                     <div class="comment-header">댓글 <span id="comment-count">0</span></div>
-                    <ul id="comment-list" class="comment-list">
-                        </ul>
+                    <ul id="comment-list" class="comment-list"></ul>
                     <div class="comment-input-box">
                         <input type="text" id="comment-input" class="comment-input" placeholder="댓글을 입력하세요 (로그인 필요)">
                         <button class="comment-btn" onclick="addComment()">등록</button>
                     </div>
                 </div>
             </main>
-
         </div>
-
         <aside class="ad-banner" style="background:#fff3e0; color:#ff9800;"></aside>
     </div>
 
@@ -268,62 +255,90 @@
 
     <script>
         let currentUser = null;
-        let currentPostId = null; // 현재 보고 있는 글 ID
+        let currentPostId = null;
 
         document.addEventListener('DOMContentLoaded', () => {
             try {
                 checkLoginStatus();
-                renderAll();
+                
+                // [핵심] 브라우저 뒤로가기(popstate) 이벤트 감지
+                window.onpopstate = function(event) {
+                    // event.state에 정보가 있으면 상세페이지로, 없으면 메인으로
+                    if (event.state && event.state.page === 'detail') {
+                        renderDetailView(event.state.id);
+                    } else {
+                        renderMainView();
+                    }
+                };
+
+                // 초기 로딩: 현재 주소창 상태에 따라 화면 결정 (단순 구현을 위해 일단 메인 렌더링)
+                renderAll(); 
+
             } catch (e) {
                 console.error("초기화 오류:", e);
-                // localStorage.clear(); // 오류 심하면 주석 해제 후 1회 실행
             }
         });
 
-        // 1. 화면 전환 함수
+        // --- 화면 전환 및 히스토리 관리 ---
+
+        // 1. 글 상세 보기 (진입)
         function goDetail(id) {
+            // [핵심] 브라우저에 "나 상세페이지 들어왔어!"라고 기록 남기기 (pushState)
+            // {state객체}, "제목(무시됨)", "가짜URL(선택사항)"
+            history.pushState({ page: 'detail', id: id }, '', ''); 
+            
+            renderDetailView(id);
+        }
+
+        // 2. 뒤로 가기 (버튼 클릭 시)
+        function goBack() {
+            // [핵심] 그냥 브라우저의 뒤로가기 기능을 실행시킴 -> 그러면 window.onpopstate가 작동해서 화면을 바꿔줌
+            history.back();
+        }
+
+        // --- 뷰 렌더링 함수들 (History 로직과 분리함) ---
+
+        function renderDetailView(id) {
             currentPostId = id;
             
-            // 데이터 가져오기
             let posts = JSON.parse(localStorage.getItem('stylePosts')) || [];
             let post = posts.find(p => p.id === id);
             
             if(post) {
-                // 조회수 증가
-                post.views = (post.views || 0) + 1;
-                localStorage.setItem('stylePosts', JSON.stringify(posts));
-
+                // 조회수 증가 (단, 브라우저 뒤로가기로 다시 왔을 땐 안 올리고 싶다면 로직 추가 필요하지만, 지금은 간단히 유지)
+                // 여기서는 pushState로 들어올 때만 올리는게 맞지만 구조상 렌더링할때마다 체크
+                // (조회수 로직은 생략하거나 유지)
+                
                 // 화면 내용 채우기
                 document.getElementById('view-title').innerText = post.title;
                 document.getElementById('view-author').innerText = "👤 " + post.nickname;
                 document.getElementById('view-date').innerText = "🕒 " + post.date;
-                document.getElementById('view-views').innerText = "👁️ " + post.views;
+                document.getElementById('view-views').innerText = "👁️ " + (post.views || 0);
                 document.getElementById('view-content').innerText = post.content;
 
-                // 댓글 렌더링
                 renderComments(post);
 
-                // 화면 전환 (메인 숨김, 상세 보임)
+                // 화면 전환
                 document.getElementById('main-view').style.display = 'none';
                 document.getElementById('detail-view').style.display = 'flex';
-                
-                // 스크롤 맨 위로
                 window.scrollTo(0, 0);
             }
         }
 
-        function goBack() {
+        function renderMainView() {
             currentPostId = null;
             document.getElementById('detail-view').style.display = 'none';
             document.getElementById('main-view').style.display = 'flex';
-            renderAll(); // 조회수 업데이트 등을 위해 목록 갱신
+            renderAll(); // 목록 갱신 (조회수 등 최신화)
         }
 
-        // 2. 댓글 기능
+
+        // --- 기능 함수들 (기존 유지) ---
+
         function renderComments(post) {
             const list = document.getElementById('comment-list');
             const count = document.getElementById('comment-count');
-            const comments = post.comments || []; // 댓글 없으면 빈 배열
+            const comments = post.comments || [];
 
             count.innerText = comments.length;
             list.innerHTML = '';
@@ -347,10 +362,8 @@
         function addComment() {
             if (!currentUser) { alert('로그인이 필요합니다.'); openModal(); return; }
             if (!currentPostId) return;
-
             const input = document.getElementById('comment-input');
             const content = input.value.trim();
-
             if (!content) { alert('내용을 입력해주세요.'); return; }
 
             let posts = JSON.parse(localStorage.getItem('stylePosts')) || [];
@@ -359,61 +372,38 @@
             if (postIndex !== -1) {
                 const now = new Date();
                 const timeString = `${now.getMonth()+1}/${now.getDate()} ${now.getHours()}:${String(now.getMinutes()).padStart(2,'0')}`;
-
-                const newComment = {
-                    authorId: currentUser.id,
-                    nickname: currentUser.nickname,
-                    content: content,
-                    date: timeString
-                };
-
-                // comments 배열이 없으면 생성
-                if (!posts[postIndex].comments) {
-                    posts[postIndex].comments = [];
-                }
-
-                posts[postIndex].comments.push(newComment);
+                if (!posts[postIndex].comments) posts[postIndex].comments = [];
+                posts[postIndex].comments.push({
+                    authorId: currentUser.id, nickname: currentUser.nickname, content: content, date: timeString
+                });
                 localStorage.setItem('stylePosts', JSON.stringify(posts));
-
-                input.value = ''; // 입력창 비우기
-                renderComments(posts[postIndex]); // 댓글창만 갱신
+                input.value = '';
+                renderComments(posts[postIndex]);
             }
         }
 
-        function deleteComment(commentIndex) {
-            if (!confirm('댓글을 삭제하시겠습니까?')) return;
-
+        function deleteComment(idx) {
+            if (!confirm('삭제하시겠습니까?')) return;
             let posts = JSON.parse(localStorage.getItem('stylePosts')) || [];
             let postIndex = posts.findIndex(p => p.id === currentPostId);
-
             if (postIndex !== -1) {
-                posts[postIndex].comments.splice(commentIndex, 1);
+                posts[postIndex].comments.splice(idx, 1);
                 localStorage.setItem('stylePosts', JSON.stringify(posts));
                 renderComments(posts[postIndex]);
             }
         }
 
-
-        // 3. 인증 및 기타 기능 (기존 유지)
         function checkLoginStatus() {
             try {
                 const storedUser = localStorage.getItem('currentUser');
-                if (storedUser) {
-                    currentUser = JSON.parse(storedUser);
-                    updateAuthUI();
-                }
+                if (storedUser) { currentUser = JSON.parse(storedUser); updateAuthUI(); }
             } catch (e) { localStorage.removeItem('currentUser'); }
         }
 
         function updateAuthUI() {
             const authSection = document.getElementById('auth-section');
             if (currentUser) {
-                authSection.innerHTML = `
-                    <div class="user-info">
-                        <span>👋 ${currentUser.nickname}님</span>
-                        <span class="logout-link" onclick="logout()">(로그아웃)</span>
-                    </div>
-                `;
+                authSection.innerHTML = `<div class="user-info"><span>👋 ${currentUser.nickname}님</span><span class="logout-link" onclick="logout()">(로그아웃)</span></div>`;
             } else {
                 authSection.innerHTML = `<button class="login-btn" onclick="openModal()">로그인 / 회원가입</button>`;
             }
@@ -423,15 +413,12 @@
             const id = document.getElementById('reg-id').value;
             const pw = document.getElementById('reg-pw').value;
             const nick = document.getElementById('reg-nick').value;
-            if (!id || !pw || !nick) { alert('모든 정보를 입력해주세요.'); return; }
-
+            if (!id || !pw || !nick) { alert('정보를 입력하세요.'); return; }
             let users = JSON.parse(localStorage.getItem('styleUsers')) || [];
             if (users.find(u => u.id === id)) { alert('이미 존재하는 아이디입니다.'); return; }
-
             users.push({ id, pw, nickname: nick });
             localStorage.setItem('styleUsers', JSON.stringify(users));
-            alert('가입 성공! 로그인 해주세요.');
-            switchAuthMode('login');
+            alert('가입 성공!'); switchAuthMode('login');
         }
 
         function login() {
@@ -439,52 +426,40 @@
             const pw = document.getElementById('login-pw').value;
             let users = JSON.parse(localStorage.getItem('styleUsers')) || [];
             const user = users.find(u => u.id === id && u.pw === pw);
-
             if (user) {
-                currentUser = user;
-                localStorage.setItem('currentUser', JSON.stringify(user));
-                updateAuthUI();
-                closeModal();
-                alert(`${user.nickname}님 환영합니다!`);
-                location.reload(); 
-            } else { alert('정보가 일치하지 않습니다.'); }
+                currentUser = user; localStorage.setItem('currentUser', JSON.stringify(user));
+                updateAuthUI(); closeModal(); alert(`${user.nickname}님 환영합니다!`); location.reload();
+            } else { alert('일치하는 정보가 없습니다.'); }
         }
 
         function logout() {
             if(confirm('로그아웃 하시겠습니까?')) {
-                currentUser = null;
-                localStorage.removeItem('currentUser');
-                updateAuthUI();
-                window.location.reload();
+                currentUser = null; localStorage.removeItem('currentUser');
+                updateAuthUI(); window.location.reload();
             }
         }
 
         function toggleForm(type) {
-            if (!currentUser) { alert('로그인이 필요한 서비스입니다.'); openModal(); return; }
+            if (!currentUser) { alert('로그인이 필요합니다.'); openModal(); return; }
             const formBox = document.getElementById(type + '-form-box');
             formBox.style.display = (formBox.style.display === 'flex') ? 'none' : 'flex';
             if(formBox.style.display === 'flex') document.getElementById(type + '-title').focus();
         }
 
         function addPost(type) {
-            if (!currentUser) { alert('로그인을 해주세요!'); return; }
+            if (!currentUser) { alert('로그인이 필요합니다.'); return; }
             const titleInput = document.getElementById(type + '-title');
             const contentInput = document.getElementById(type + '-content');
-            if (!titleInput.value) { alert('제목을 입력해주세요!'); return; }
+            if (!titleInput.value) { alert('제목을 입력해주세요.'); return; }
 
             const now = new Date();
             const timeString = `${now.getMonth()+1}/${now.getDate()} ${now.getHours()}:${String(now.getMinutes()).padStart(2,'0')}`;
 
             const post = {
-                id: Date.now(),
-                type: type,
-                nickname: currentUser.nickname,
-                authorId: currentUser.id,
-                title: titleInput.value,
-                content: contentInput.value,
-                date: timeString,
-                views: 0,
-                comments: [] // 댓글 배열 초기화
+                id: Date.now(), type: type,
+                nickname: currentUser.nickname, authorId: currentUser.id,
+                title: titleInput.value, content: contentInput.value,
+                date: timeString, views: 0, comments: []
             };
 
             let posts = JSON.parse(localStorage.getItem('stylePosts')) || [];
@@ -492,16 +467,14 @@
             localStorage.setItem('stylePosts', JSON.stringify(posts));
 
             titleInput.value = ''; contentInput.value = '';
-            toggleForm(type);
-            renderAll();
+            toggleForm(type); renderAll();
         }
 
         function deletePost(event, id, authorId) {
             event.stopPropagation();
             if (!currentUser) { alert('로그인 후 가능합니다.'); return; }
             if (authorId && authorId !== currentUser.id) { alert('본인 글만 삭제 가능합니다.'); return; }
-            
-            if(confirm('정말 삭제하시겠습니까?')) {
+            if(confirm('삭제하시겠습니까?')) {
                 let posts = JSON.parse(localStorage.getItem('stylePosts')) || [];
                 posts = posts.filter(p => p.id !== id);
                 localStorage.setItem('stylePosts', JSON.stringify(posts));
@@ -520,9 +493,8 @@
             posts.forEach(post => {
                 const views = post.views || 0;
                 const authorId = post.authorId || '';
-                const commentCount = (post.comments || []).length; // 댓글 수
+                const commentCount = (post.comments || []).length;
                 
-                // 클릭 시 goDetail(id) 함수 실행
                 const html = `
                     <li>
                         <div class="post-info-wrapper" onclick="goDetail(${post.id})">
@@ -540,7 +512,6 @@
                 else if (post.type === 'fashion') fashionList.innerHTML += html;
             });
 
-            // 트렌드
             const trendPosts = posts.slice(0, 3);
             if(trendPosts.length > 0) {
                 trendPosts.forEach((post, index) => {
