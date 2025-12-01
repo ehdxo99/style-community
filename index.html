@@ -137,7 +137,7 @@
             padding: 15px;
             border-radius: 8px;
             margin-bottom: 20px;
-            display: none; /* 기본적으로 숨김 */
+            display: none;
             gap: 10px;
             flex-direction: column;
             border: 1px solid #eee;
@@ -150,7 +150,20 @@
         }
 
         .form-row { display: flex; gap: 10px; }
-        .mini-input { flex: 1; padding: 8px; border: 1px solid #ddd; border-radius: 4px; }
+        .mini-input { 
+            flex: 1; padding: 10px; border: 1px solid #ddd; border-radius: 4px; 
+        }
+        /* 내용 입력창 (Textarea) 스타일 변경 */
+        .mini-textarea {
+            width: 100%;
+            height: 100px; /* 기본 높이 넉넉하게 */
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            resize: vertical; /* 사용자가 늘릴 수 있음 */
+            font-family: inherit;
+        }
+
         .mini-btn {
             background: var(--accent-color); color: white; border: none; padding: 0 20px;
             border-radius: 4px; font-weight: bold; cursor: pointer;
@@ -191,166 +204,3 @@
     </header>
 
     <div class="wrapper">
-        <aside class="ad-banner" style="background:#e3f2fd; color:#2196f3;"></aside>
-
-        <main class="main-content">
-            
-            <div class="photo-banner">
-                <div class="photo-card">
-                    <img src="https://via.placeholder.com/300x150/5d5fef/ffffff?text=OOTD" class="photo-img">
-                    <div class="photo-info">데일리 룩</div>
-                </div>
-                <div class="photo-card">
-                    <img src="https://via.placeholder.com/300x150/ff7675/ffffff?text=HOT" class="photo-img">
-                    <div class="photo-info">인기 아이템</div>
-                </div>
-                <div class="photo-card">
-                    <img src="https://via.placeholder.com/300x150/74b9ff/ffffff?text=Shoes" class="photo-img">
-                    <div class="photo-info">신발 추천</div>
-                </div>
-                <div class="photo-card">
-                    <img src="https://via.placeholder.com/300x150/fdcb6e/ffffff?text=Review" class="photo-img">
-                    <div class="photo-info">내돈내산 리뷰</div>
-                </div>
-            </div>
-
-            <div class="trend-section">
-                <div class="section-header">
-                    <div class="section-title">🔥 실시간 트렌드</div>
-                </div>
-                <ul id="trend-list" class="post-list">
-                    <li style="color:#888; font-size:14px;">로딩중...</li>
-                </ul>
-            </div>
-
-            <div class="board-container">
-                <div class="section-header">
-                    <div class="section-title">💬 자유 게시판</div>
-                    <button class="write-toggle-btn" onclick="toggleForm('free')">+</button>
-                </div>
-                
-                <div id="free-form-box" class="mini-write-form">
-                    <div class="form-row">
-                        <input type="text" id="free-title" class="mini-input" placeholder="제목을 입력하세요">
-                        <button class="mini-btn" onclick="addPost('free')">등록</button>
-                    </div>
-                    <input type="text" id="free-content" class="mini-input" placeholder="내용을 입력하세요">
-                </div>
-
-                <ul id="free-list" class="post-list"></ul>
-            </div>
-
-            <div class="board-container">
-                <div class="section-header">
-                    <div class="section-title">👕 패션 게시판</div>
-                    <button class="write-toggle-btn" onclick="toggleForm('fashion')">+</button>
-                </div>
-
-                <div id="fashion-form-box" class="mini-write-form">
-                    <div class="form-row">
-                        <input type="text" id="fashion-title" class="mini-input" placeholder="제목을 입력하세요">
-                        <button class="mini-btn" onclick="addPost('fashion')">등록</button>
-                    </div>
-                    <input type="text" id="fashion-content" class="mini-input" placeholder="내용을 입력하세요">
-                </div>
-
-                <ul id="fashion-list" class="post-list"></ul>
-            </div>
-
-        </main>
-
-        <aside class="ad-banner" style="background:#fff3e0; color:#ff9800;"></aside>
-    </div>
-
-    <script>
-        document.addEventListener('DOMContentLoaded', renderAll);
-
-        // 글쓰기 폼 토글 기능
-        function toggleForm(type) {
-            const formBox = document.getElementById(type + '-form-box');
-            // 폼이 꺼져있으면(none) 켜고(flex), 켜져있으면 끈다(none)
-            if (formBox.style.display === 'flex') {
-                formBox.style.display = 'none';
-            } else {
-                formBox.style.display = 'flex';
-                // 제목 입력창에 포커스 자동 이동
-                document.getElementById(type + '-title').focus();
-            }
-        }
-
-        function addPost(type) {
-            const titleInput = document.getElementById(type + '-title');
-            const contentInput = document.getElementById(type + '-content');
-
-            if (!titleInput.value) { alert('제목을 입력해주세요!'); return; }
-
-            const post = {
-                id: Date.now(),
-                type: type,
-                title: titleInput.value,
-                content: contentInput.value,
-                date: new Date().toLocaleDateString()
-            };
-
-            let posts = JSON.parse(localStorage.getItem('stylePosts')) || [];
-            posts.unshift(post);
-            localStorage.setItem('stylePosts', JSON.stringify(posts));
-
-            titleInput.value = '';
-            contentInput.value = '';
-            
-            // 글 등록 후 폼 다시 숨기기
-            toggleForm(type);
-            renderAll();
-        }
-
-        function deletePost(id) {
-            if(confirm('삭제하시겠습니까?')) {
-                let posts = JSON.parse(localStorage.getItem('stylePosts')) || [];
-                posts = posts.filter(p => p.id !== id);
-                localStorage.setItem('stylePosts', JSON.stringify(posts));
-                renderAll();
-            }
-        }
-
-        function renderAll() {
-            const posts = JSON.parse(localStorage.getItem('stylePosts')) || [];
-            const freeList = document.getElementById('free-list');
-            const fashionList = document.getElementById('fashion-list');
-            const trendList = document.getElementById('trend-list');
-
-            freeList.innerHTML = '';
-            fashionList.innerHTML = '';
-            trendList.innerHTML = '';
-
-            posts.forEach(post => {
-                const html = `
-                    <li>
-                        <span class="post-title" onclick="alert('내용: ' + '${post.content}')">${post.title}</span>
-                        <button class="del-btn" onclick="deletePost(${post.id})">&times;</button>
-                    </li>
-                `;
-                if (post.type === 'free') freeList.innerHTML += html;
-                else if (post.type === 'fashion') fashionList.innerHTML += html;
-            });
-
-            // 실시간 트렌드
-            const trendPosts = posts.slice(0, 3);
-            if(trendPosts.length > 0) {
-                trendPosts.forEach((post, index) => {
-                    trendList.innerHTML += `
-                        <li>
-                            <span class="post-title" onclick="alert('내용: ' + '${post.content}')">
-                                <span class="hot-badge">${index+1}</span> ${post.title}
-                            </span>
-                            <span style="font-size:12px; color:#999;">${post.type === 'free' ? '자유' : '패션'}</span>
-                        </li>
-                    `;
-                });
-            } else {
-                trendList.innerHTML = '<li style="color:#aaa; text-align:center;">작성된 글이 없습니다.</li>';
-            }
-        }
-    </script>
-</body>
-</html>
