@@ -21,7 +21,6 @@
             color: var(--text-color);
         }
 
-        /* 레이아웃 구조 */
         .wrapper {
             max-width: 1600px;
             margin: 0 auto;
@@ -32,7 +31,6 @@
             align-items: start;
         }
 
-        /* 헤더 */
         header {
             background: var(--card-bg);
             border-bottom: 1px solid #ddd;
@@ -49,7 +47,6 @@
         .logo { font-size: 24px; font-weight: 800; font-style: italic; color: var(--accent-color); }
         .nav-menu a { margin-left: 20px; font-weight: 500; color: #555; text-decoration: none; }
 
-        /* 광고 배너 */
         .ad-banner {
             height: 600px;
             background: #e9ecef;
@@ -64,7 +61,6 @@
         }
         .ad-banner::after { content: "AD"; }
 
-        /* 중앙 메인 컨텐츠 */
         .main-content {
             display: flex;
             flex-direction: column;
@@ -72,7 +68,6 @@
             min-width: 0;
         }
 
-        /* 상단 포토 배너 */
         .photo-banner {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
@@ -90,13 +85,13 @@
         .photo-img { width: 100%; height: 120px; background: #ddd; object-fit: cover; }
         .photo-info { padding: 10px; font-size: 14px; font-weight: 600; text-align: center; }
 
-        /* 실시간 트렌드 */
-        .trend-section {
+        .trend-section, .board-container {
             background: white;
             padding: 20px;
             border-radius: 12px;
             box-shadow: 0 2px 8px rgba(0,0,0,0.05);
         }
+        
         .section-header { 
             display: flex; 
             justify-content: space-between; 
@@ -106,32 +101,15 @@
         .section-title { font-size: 18px; font-weight: 700; display: flex; align-items: center; gap: 8px; }
         .hot-badge { background: #ff4d4f; color: white; padding: 2px 6px; border-radius: 4px; font-size: 11px; }
 
-        /* 게시판 스타일 */
-        .board-container {
-            background: white;
-            border-radius: 12px;
-            padding: 20px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-        }
-        
-        /* [+] 버튼 스타일 */
         .write-toggle-btn {
-            width: 32px;
-            height: 32px;
-            border-radius: 50%;
-            background-color: var(--bg-color);
-            color: var(--primary-color);
-            border: none;
-            font-size: 20px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            transition: 0.2s;
+            width: 32px; height: 32px; border-radius: 50%;
+            background-color: var(--bg-color); color: var(--primary-color);
+            border: none; font-size: 20px; display: flex;
+            align-items: center; justify-content: center;
+            cursor: pointer; transition: 0.2s;
         }
         .write-toggle-btn:hover { background-color: var(--accent-color); color: white; }
 
-        /* 숨겨진 글쓰기 폼 */
         .mini-write-form {
             background: #f8f9fa;
             padding: 15px;
@@ -150,18 +128,13 @@
         }
 
         .form-row { display: flex; gap: 10px; }
-        .mini-input { 
-            flex: 1; padding: 10px; border: 1px solid #ddd; border-radius: 4px; 
-        }
-        /* 내용 입력창 (Textarea) 스타일 변경 */
+        .mini-input { flex: 1; padding: 10px; border: 1px solid #ddd; border-radius: 4px; }
+        .nickname-input { width: 120px; padding: 10px; border: 1px solid #ddd; border-radius: 4px; } /* 닉네임 칸 스타일 */
+        
         .mini-textarea {
-            width: 100%;
-            height: 100px; /* 기본 높이 넉넉하게 */
-            padding: 10px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            resize: vertical; /* 사용자가 늘릴 수 있음 */
-            font-family: inherit;
+            width: 100%; height: 100px; padding: 10px;
+            border: 1px solid #ddd; border-radius: 4px;
+            resize: vertical; font-family: inherit;
         }
 
         .mini-btn {
@@ -170,7 +143,6 @@
         }
         .mini-btn:hover { background: #4c4edb; }
 
-        /* 게시글 목록 */
         .post-list li {
             padding: 12px 0;
             border-bottom: 1px solid #f1f1f1;
@@ -178,12 +150,30 @@
             justify-content: space-between;
             align-items: center;
         }
-        .post-title { font-size: 15px; font-weight: 500; cursor: pointer; }
+        
+        /* 게시글 내용 레이아웃 */
+        .post-info-wrapper {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            cursor: pointer;
+            width: 100%;
+        }
+        .post-title { font-size: 15px; font-weight: 600; }
         .post-title:hover { text-decoration: underline; }
-        .del-btn { color: #ccc; cursor: pointer; border: none; background: none; font-size: 16px; }
+        
+        /* 메타 정보 (닉네임, 시간, 조회수) */
+        .post-meta {
+            font-size: 12px;
+            color: #888;
+            display: flex;
+            gap: 10px;
+        }
+        .meta-item { display: flex; align-items: center; gap: 3px; }
+
+        .del-btn { color: #ccc; cursor: pointer; border: none; background: none; font-size: 18px; margin-left: 10px;}
         .del-btn:hover { color: red; }
 
-        /* 반응형 */
         @media (max-width: 1024px) {
             .wrapper { grid-template-columns: 1fr; }
             .ad-banner { display: none; }
@@ -209,28 +199,14 @@
         <main class="main-content">
             
             <div class="photo-banner">
-                <div class="photo-card">
-                    <img src="https://via.placeholder.com/300x150/5d5fef/ffffff?text=OOTD" class="photo-img">
-                    <div class="photo-info">데일리 룩</div>
-                </div>
-                <div class="photo-card">
-                    <img src="https://via.placeholder.com/300x150/ff7675/ffffff?text=HOT" class="photo-img">
-                    <div class="photo-info">인기 아이템</div>
-                </div>
-                <div class="photo-card">
-                    <img src="https://via.placeholder.com/300x150/74b9ff/ffffff?text=Shoes" class="photo-img">
-                    <div class="photo-info">신발 추천</div>
-                </div>
-                <div class="photo-card">
-                    <img src="https://via.placeholder.com/300x150/fdcb6e/ffffff?text=Review" class="photo-img">
-                    <div class="photo-info">내돈내산 리뷰</div>
-                </div>
+                <div class="photo-card"><img src="https://via.placeholder.com/300x150/5d5fef/ffffff?text=OOTD" class="photo-img"><div class="photo-info">데일리 룩</div></div>
+                <div class="photo-card"><img src="https://via.placeholder.com/300x150/ff7675/ffffff?text=HOT" class="photo-img"><div class="photo-info">인기 아이템</div></div>
+                <div class="photo-card"><img src="https://via.placeholder.com/300x150/74b9ff/ffffff?text=Shoes" class="photo-img"><div class="photo-info">신발 추천</div></div>
+                <div class="photo-card"><img src="https://via.placeholder.com/300x150/fdcb6e/ffffff?text=Review" class="photo-img"><div class="photo-info">내돈내산 리뷰</div></div>
             </div>
 
             <div class="trend-section">
-                <div class="section-header">
-                    <div class="section-title">🔥 실시간 트렌드</div>
-                </div>
+                <div class="section-header"><div class="section-title">🔥 실시간 트렌드</div></div>
                 <ul id="trend-list" class="post-list">
                     <li style="color:#888; font-size:14px;">로딩중...</li>
                 </ul>
@@ -244,6 +220,7 @@
                 
                 <div id="free-form-box" class="mini-write-form">
                     <div class="form-row">
+                        <input type="text" id="free-nickname" class="nickname-input" placeholder="닉네임">
                         <input type="text" id="free-title" class="mini-input" placeholder="제목을 입력하세요">
                         <button class="mini-btn" onclick="addPost('free')">등록</button>
                     </div>
@@ -261,6 +238,7 @@
 
                 <div id="fashion-form-box" class="mini-write-form">
                     <div class="form-row">
+                         <input type="text" id="fashion-nickname" class="nickname-input" placeholder="닉네임">
                         <input type="text" id="fashion-title" class="mini-input" placeholder="제목을 입력하세요">
                         <button class="mini-btn" onclick="addPost('fashion')">등록</button>
                     </div>
@@ -284,28 +262,38 @@
                 formBox.style.display = 'none';
             } else {
                 formBox.style.display = 'flex';
-                document.getElementById(type + '-title').focus();
+                document.getElementById(type + '-nickname').focus(); // 닉네임부터 입력하게 포커스
             }
         }
 
         function addPost(type) {
+            const nicknameInput = document.getElementById(type + '-nickname');
             const titleInput = document.getElementById(type + '-title');
             const contentInput = document.getElementById(type + '-content');
 
             if (!titleInput.value) { alert('제목을 입력해주세요!'); return; }
+            // 닉네임 안 쓰면 '익명'으로 처리
+            const nickname = nicknameInput.value.trim() || "익명";
+
+            // 현재 시간 포맷 (월-일 시:분)
+            const now = new Date();
+            const timeString = `${now.getMonth()+1}/${now.getDate()} ${now.getHours()}:${String(now.getMinutes()).padStart(2,'0')}`;
 
             const post = {
                 id: Date.now(),
                 type: type,
+                nickname: nickname, // 닉네임 저장
                 title: titleInput.value,
                 content: contentInput.value,
-                date: new Date().toLocaleDateString()
+                date: timeString, // 시간 저장
+                views: 0 // 조회수 0 초기화
             };
 
             let posts = JSON.parse(localStorage.getItem('stylePosts')) || [];
             posts.unshift(post);
             localStorage.setItem('stylePosts', JSON.stringify(posts));
 
+            nicknameInput.value = '';
             titleInput.value = '';
             contentInput.value = '';
             
@@ -313,7 +301,29 @@
             renderAll();
         }
 
+        // 조회수 증가 및 내용 보기 함수
+        function viewPost(id) {
+            let posts = JSON.parse(localStorage.getItem('stylePosts')) || [];
+            // 해당 글 찾기
+            const index = posts.findIndex(p => p.id === id);
+            
+            if(index !== -1) {
+                // 조회수 1 증가
+                posts[index].views = (posts[index].views || 0) + 1;
+                localStorage.setItem('stylePosts', JSON.stringify(posts));
+                
+                // 화면 갱신 (조회수 올라간거 보여주기 위해)
+                renderAll();
+
+                // 내용 보여주기
+                alert(`[${posts[index].title}]\n\n${posts[index].content}`);
+            }
+        }
+
         function deletePost(id) {
+            // 이벤트 전파 방지 (삭제 눌렀는데 조회수 오르는 것 방지)
+            event.stopPropagation(); 
+            
             if(confirm('삭제하시겠습니까?')) {
                 let posts = JSON.parse(localStorage.getItem('stylePosts')) || [];
                 posts = posts.filter(p => p.id !== id);
@@ -333,9 +343,20 @@
             trendList.innerHTML = '';
 
             posts.forEach(post => {
+                // 예전 데이터 호환성 처리
+                const nickname = post.nickname || "익명";
+                const views = post.views || 0;
+                
                 const html = `
                     <li>
-                        <span class="post-title" onclick="alert('내용:\\n' + '${post.content.replace(/\n/g, '\\n')}')">${post.title}</span>
+                        <div class="post-info-wrapper" onclick="viewPost(${post.id})">
+                            <span class="post-title">${post.title}</span>
+                            <div class="post-meta">
+                                <span class="meta-item">👤 ${nickname}</span>
+                                <span class="meta-item">🕒 ${post.date}</span>
+                                <span class="meta-item">👁️ ${views}</span>
+                            </div>
+                        </div>
                         <button class="del-btn" onclick="deletePost(${post.id})">&times;</button>
                     </li>
                 `;
@@ -343,16 +364,22 @@
                 else if (post.type === 'fashion') fashionList.innerHTML += html;
             });
 
-            // 실시간 트렌드
+            // 실시간 트렌드 (조회수 순으로 정렬하려면 sort 사용, 지금은 최신순 유지)
             const trendPosts = posts.slice(0, 3);
             if(trendPosts.length > 0) {
                 trendPosts.forEach((post, index) => {
+                    const views = post.views || 0;
                     trendList.innerHTML += `
                         <li>
-                            <span class="post-title" onclick="alert('내용:\\n' + '${post.content.replace(/\n/g, '\\n')}')">
-                                <span class="hot-badge">${index+1}</span> ${post.title}
-                            </span>
-                            <span style="font-size:12px; color:#999;">${post.type === 'free' ? '자유' : '패션'}</span>
+                            <div class="post-info-wrapper" onclick="viewPost(${post.id})">
+                                <span class="post-title">
+                                    <span class="hot-badge">${index+1}</span> ${post.title}
+                                </span>
+                                <div class="post-meta">
+                                    <span style="color:#5d5fef; font-weight:bold;">${post.type === 'free' ? '자유' : '패션'}</span>
+                                    <span>👁️ ${views}</span>
+                                </div>
+                            </div>
                         </li>
                     `;
                 });
