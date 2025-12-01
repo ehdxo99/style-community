@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Style - 커뮤니티</title>
+    <style>
+        :root {
+            --primary-color: #333;
+            --accent-color: #5d5fef;
+            --bg-color: #f0f2f5;
+            --card-bg: #ffffff;
+            --text-color: #333;
+            --gray-text: #888;
+        }
+        
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+        }
+
+        /* 레이아웃 구조 */
+        .wrapper {
+            max-width: 1600px; /* 전체 너비 넓게 */
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 180px 1fr 180px; /* 좌광고 - 본문 - 우광고 */
+            gap: 20px;
+            padding: 20px;
+            align-items: start;
+        }
+
+        /* 헤더 */
+        header {
+            background: var(--card-bg);
+            border-bottom: 1px solid #ddd;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+        .nav-inner { width: 100%; max-width: 1200px; display: flex; justify-content: space-between; padding: 0 20px; }
+        .logo { font-size: 24px; font-weight: 800; font-style: italic; color: var(--accent-color); }
+        .nav-menu a { margin-left: 20px; font-weight: 500; color: #555; text-decoration: none; }
+
+        /* 광고 배너 (양쪽 사이드) */
+        .ad-banner {
+            height: 600px;
+            background: #e9ecef;
+            color: #adb5bd;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            position: sticky;
+            top: 80px;
+            border-radius: 8px;
+        }
+        .ad-banner::after { content: "AD"; }
+
+        /* 중앙 메인 컨텐츠 */
+        .main-content {
+            display: flex;
+            flex-direction: column;
+            gap: 25px;
+            min-width: 0; /* 그리드 깸 방지 */
+        }
+
+        /* 1. 상단 포토 배너 (복구됨) */
+        .photo-banner {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
+        }
+        .photo-card {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+        .photo-card:hover { transform: translateY(-3px); }
+        .photo-img {
+            width: 100%; height: 120px; background: #ddd; object-fit: cover;
+        }
+        .photo-info { padding: 10px; font-size: 14px; font-weight: 600; text-align: center; }
+
+        /* 2. 실시간 트렌드 (복구됨 - 실제 글 연동) */
+        .trend-section {
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+        .section-title { font-size: 18px; font-weight: 700; margin-bottom: 15px; display: flex; align-items: center; gap: 8px;}
+        .hot-badge { background: #ff4d4f; color: white; padding: 2px 6px; border-radius: 4px; font-size: 11px; }
+
+        /* 3. 게시판 스타일 (공통) */
+        .board-container {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+        
+        /* 게시판 내 글쓰기 폼 */
+        .mini-write-form {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            display: flex;
+            gap: 10px;
+            flex-direction: column;
+        }
+        .form-row { display: flex; gap: 10px; }
+        .mini-input { flex: 1; padding: 8px; border: 1px solid #ddd; border-radius: 4px; }
+        .mini-btn {
+            background: var(--accent-color); color: white; border: none; padding: 0 20px;
+            border-radius: 4px; font-weight: bold; cursor: pointer;
+        }
+        .mini-btn:hover { background: #4c4edb; }
+
+        /* 게시글 목록 */
+        .post-list li {
+            padding: 12px 0;
+            border-bottom: 1px solid #f1f1f1;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .post-title { font-size: 15px; font-weight: 500; cursor: pointer; }
+        .post-title:hover { text-decoration: underline; }
+        .del-btn { color: #ccc; cursor: pointer; border: none; background: none; font-size: 16px; }
+        .del-btn:hover { color: red; }
+
+        /* 반응형 */
+        @media (max-width: 1024px) {
+            .wrapper { grid-template-columns: 1fr; }
+            .ad-banner { display: none; }
+            .photo-banner { grid-template-columns: repeat(2, 1fr); }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="nav-inner">
+            <div class="logo">Style</div>
+            <nav class="nav-menu">
+                <a href="#">홈</a>
+                <a href="#">로그인</a>
+            </nav>
+        </div>
+    </header>
+
+    <div class="wrapper">
+        <aside class="ad-banner" style="background:#e3f2fd; color:#2196f3;"></aside>
+
+        <main class="main-content">
+            
+            <div class="photo-banner">
+                <div class="photo-card">
+                    <img src="https://via.placeholder.com/300x150/5d5fef/ffffff?text=OOTD" class="photo-img">
+                    <div class="photo-info">데일리 룩</div>
+                </div>
+                <div class="photo-card">
+                    <img src="https://via.placeholder.com/300x150/ff7675/ffffff?text=HOT" class="photo-img">
+                    <div class="photo-info">인기 아이템</div>
+                </div>
+                <div class="photo-card">
+                    <img src="https://via.placeholder.com/300x150/74b9ff/ffffff?text=Shoes" class="photo-img">
+                    <div class="photo-info">신발 추천</div>
+                </div>
+                <div class="photo-card">
+                    <img src="https://via.placeholder.com/300x150/fdcb6e/ffffff?text=Review" class="photo-img">
+                    <div class="photo-info">내돈내산 리뷰</div>
+                </div>
+            </div>
+
+            <div class="trend-section">
+                <div class="section-title">🔥 실시간 트렌드</div>
+                <ul id="trend-list" class="post-list">
+                    <li style="color:#888; font-size:14px;">등록된 글이 없으면 이곳이 비어있습니다.</li>
+                </ul>
+            </div>
+
+            <div class="board-container">
+                <div class="section-title">💬 자유 게시판</div>
+                
+                <div class="mini-write-form">
+                    <div class="form-row">
+                        <input type="text" id="free-title" class="mini-input" placeholder="제목을 입력하세요">
+                        <button class="mini-btn" onclick="addPost('free')">등록</button>
+                    </div>
+                    <input type="text" id="free-content" class="mini-input" placeholder="내용을 간단히 입력하세요">
+                </div>
+
+                <ul id="free-list" class="post-list"></ul>
+            </div>
+
+            <div class="board-container">
+                <div class="section-title">👕 패션 게시판</div>
+
+                <div class="mini-write-form">
+                    <div class="form-row">
+                        <input type="text" id="fashion-title" class="mini-input" placeholder="제목을 입력하세요">
+                        <button class="mini-btn" onclick="addPost('fashion')">등록</button>
+                    </div>
+                    <input type="text" id="fashion-content" class="mini-input" placeholder="내용을 간단히 입력하세요">
+                </div>
+
+                <ul id="fashion-list" class="post-list"></ul>
+            </div>
+
+        </main>
+
+        <aside class="ad-banner" style="background:#fff3e0; color:#ff9800;"></aside>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', renderAll);
+
+        function addPost(type) {
+            const titleInput = document.getElementById(type + '-title');
+            const contentInput = document.getElementById(type + '-content');
+
+            if (!titleInput.value) { alert('제목을 입력해주세요!'); return; }
+
+            const post = {
+                id: Date.now(),
+                type: type, // 'free' or 'fashion'
+                title: titleInput.value,
+                content: contentInput.value,
+                date: new Date().toLocaleDateString()
+            };
+
+            let posts = JSON.parse(localStorage.getItem('stylePosts')) || [];
+            posts.unshift(post); // 최신글이 위로
+            localStorage.setItem('stylePosts', JSON.stringify(posts));
+
+            titleInput.value = '';
+            contentInput.value = '';
+            renderAll();
+        }
+
+        function deletePost(id) {
+            if(confirm('삭제하시겠습니까?')) {
+                let posts = JSON.parse(localStorage.getItem('stylePosts')) || [];
+                posts = posts.filter(p => p.id !== id);
+                localStorage.setItem('stylePosts', JSON.stringify(posts));
+                renderAll();
+            }
+        }
+
+        function renderAll() {
+            const posts = JSON.parse(localStorage.getItem('stylePosts')) || [];
+            const freeList = document.getElementById('free-list');
+            const fashionList = document.getElementById('fashion-list');
+            const trendList = document.getElementById('trend-list');
+
+            freeList.innerHTML = '';
+            fashionList.innerHTML = '';
+            trendList.innerHTML = '';
+
+            // 1. 게시판별 렌더링
+            posts.forEach(post => {
+                const html = `
+                    <li>
+                        <span class="post-title" onclick="alert('${post.content}')">${post.title}</span>
+                        <button class="del-btn" onclick="deletePost(${post.id})">&times;</button>
+                    </li>
+                `;
+                if (post.type === 'free') freeList.innerHTML += html;
+                else if (post.type === 'fashion') fashionList.innerHTML += html;
+            });
+
+            // 2. 실시간 트렌드 렌더링 (전체 글 중 최신 3개)
+            const trendPosts = posts.slice(0, 3);
+            if(trendPosts.length > 0) {
+                trendPosts.forEach((post, index) => {
+                    trendList.innerHTML += `
+                        <li>
+                            <span class="post-title">
+                                <span class="hot-badge">${index+1}</span> ${post.title}
+                            </span>
+                            <span style="font-size:12px; color:#999;">${post.type === 'free' ? '자유' : '패션'}</span>
+                        </li>
+                    `;
+                });
+            } else {
+                trendList.innerHTML = '<li style="color:#aaa; text-align:center;">아직 글이 없습니다. 글을 작성해보세요!</li>';
+            }
+        }
+    </script>
+</body>
+</html>
